@@ -8,7 +8,7 @@ const app =express();
 const Server=http.createServer(app);
 const io=new socketServer(Server,{
     cors:{
-        origin:'*',
+        origin:' http://127.0.0.1:5173',
     }
 })
 app.use(morgan("dev"));
@@ -17,6 +17,7 @@ app.use(cors());
 io.on('connection',(socket)=>{
     console.log(socket.id);
     socket.on('message',(message)=>{
+        console.log(message)
         socket.broadcast.emit("message",{
             body:message,
             from:socket.id,

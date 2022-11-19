@@ -12,10 +12,26 @@ function App() {
     body:"message test",
     from:"user1"
   }])
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+   
+    
+    const newMessage = {
+      body: message,
+      from: "Me",
+    };
+    
+    setMessages([newMessage,...messages])
+    
+    setMessage("")
+    socket.emit("message",newMessage.body)
+    
+  }
  
   useEffect(()=>{
     const receiveMessage=(message)=>{
       setMessages([message,...messages])
+      console.log(setMessage)
       
     }
     socket.on('message',receiveMessage)
@@ -24,18 +40,7 @@ function App() {
     socket.off('message',receiveMessage)
 };
 },[messages])
-const handleSubmit=(e)=>{
-  e.preventDefault();
-  socket.emit("message",message)
 
-  const newMessage={
-    body:message,
-    from:"Me"
-  }
-  setMessage([...messages,newMessage])
-  setMessage("")
-  socket.emit("message",newMessage.body)
-}
 
   return (
     <div className="App">
@@ -43,7 +48,7 @@ const handleSubmit=(e)=>{
       <form onSubmit={handleSubmit}>
         <input type="text" onChange={(e)=>setMessage(e.target.value)}
         value={message}/>
-        <button type='submit'>
+        <button>
           Enviar
         </button>
       </form>
